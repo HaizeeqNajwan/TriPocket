@@ -1,0 +1,12 @@
+/* custom.css */
+body {
+    background-image: url("/public/images/Background.png"); /* Add your background image */
+    background-size: cover;
+    background-position: center;
+    height: 100vh;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
