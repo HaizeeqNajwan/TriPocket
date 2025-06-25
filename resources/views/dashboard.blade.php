@@ -235,7 +235,7 @@
             // Submit the form after showing animations
             setTimeout(() => {
                 form.submit();
-            }, 100);
+            }, 200);
         });
     </script>
 </body>

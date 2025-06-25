@@ -31,4 +31,5 @@ class SavedItinerary extends Model
     {
         return is_array($this->days) ? $this->days : [];
     }
+    
 }

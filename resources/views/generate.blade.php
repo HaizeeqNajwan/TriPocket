@@ -86,7 +86,11 @@
                                                     <i class="fas fa-map-marker-alt mr-1"></i>
                                                     {{ $activity['location'] }}
                                                 </p>
-                                                <p class="text-gray-700 text-sm mt-2 whitespace-pre-line">{{ $activity['details'] }}</p>
+                                                <div class="relative group">
+                                                    <p class="text-gray-700 text-sm mt-2 line-clamp-2 group-hover:line-clamp-none transition-all duration-300 ease-in-out">
+                                                        {{ $activity['details'] }}
+                                                    </p>
+                                                </div>
                                             </a>
                                         </div>
                                     @endforeach
@@ -104,7 +108,7 @@
                         <i class="fas fa-edit mr-2"></i> Customize
                     </button>
                     <button id="savePlanBtn" class="bg-pink-500 hover:bg-pink-600 text-white px-4 py-2 rounded flex-1 transition duration-200"
-                            data-itinerary="{{ json_encode($itinerary) }}"
+                            data-itinerary='@json($itinerary)'
                             data-location="{{ $tripLocation ?? '' }}"
                             data-theme="{{ $tripTheme ?? '' }}">
                         <i class="fas fa-save mr-2"></i> Save Plan
@@ -125,9 +129,22 @@
 <!-- Font Awesome -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 
+<!-- CSRF Meta -->
+<meta name="csrf-token" content="{{ csrf_token() }}">
+
+<!-- Tailwind Plugin for line clamp -->
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/@tailwindcss/line-clamp@0.4.0"></script>
+<script>
+    tailwind.config = {
+        plugins: [tailwindcssLineClamp],
+    }
+</script>
+
 <script>
     document.addEventListener('DOMContentLoaded', () => {
-        // Save Plan Button
+        const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
         document.getElementById('savePlanBtn')?.addEventListener('click', async function() {
             const title = prompt("Enter a name for your itinerary:");
             if (!title) return;
@@ -137,7 +154,7 @@
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
-                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                        'X-CSRF-TOKEN': csrfToken,
                         'Accept': 'application/json'
                     },
                     body: JSON.stringify({
@@ -163,14 +180,13 @@
             }
         });
 
-        // Customize Button
         document.getElementById('customizeBtn')?.addEventListener('click', async function () {
             try {
                 const response = await fetch("{{ route('itinerary.customize') }}", {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
-                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                        'X-CSRF-TOKEN': csrfToken,
                         'Accept': 'application/json'
                     },
                     body: JSON.stringify({
