@@ -29,62 +29,62 @@ class ItineraryController extends Controller
             'destination' => 'required|string|max:255|regex:/^[\pL\s\-,]+$/u',
             'travel_type' => 'required|string|in:cultural,adventure,relaxation,business,food,romantic,solo,family',
         ]);
-    
-        $userPreferences = Auth::check() ? Auth::user()->preferences ?? [] : [];
+
+        $userPreferences = Auth::check() ? (Auth::user()->preferences ?? []) : [];
         $customPreferences = Auth::check() ? json_decode(Auth::user()->custom_preferences ?? '[]', true) : [];
-    
+
         $prefs = array_merge($userPreferences, $customPreferences);
-    
+
         $preferenceString = '';
         if (!empty($prefs)) {
-            $preferenceString .= "Tailor the itinerary around the following user preferences: ";
-            $preferenceString .= implode(', ', $prefs) . ".\n";
-            $preferenceString .= "Ensure that activities align with these interests.\n";
-            $preferenceString .= "Do not include generic or irrelevant activities.";
+            $preferenceString .= "The user has the following preferences: " . implode(', ', $prefs) . ". ";
+            $preferenceString .= "Make sure the activities match these preferences and avoid generic or irrelevant suggestions.\n";
+        } else {
+            $preferenceString .= "The user did not specify any additional preferences.\n";
         }
-    
+
         $prompt = <<<EOT
-    Generate a {$validated['days']}-day {$validated['travel_type']} travel itinerary for a trip to {$validated['destination']}.
-    
-    {$preferenceString}
-    
-    Use this format:
-    
-    Day 1:
-    08:00 Activity Name @ Location - Short description
-    10:00 Activity Name @ Location - Short description
-    ...
-    (3–5 activities total)
-    
-    Day 2:
-    08:00 Activity Name @ Location - Short description
-    ...
-    
-    Continue this format up to Day {$validated['days']}.
-    Do not skip any days.
-    Be concise and use clear, simple language.
-    EOT;
-    
+You are a helpful travel planner powered by LLaMA 4. Please generate a {$validated['days']}-day itinerary for a {$validated['travel_type']} trip to {$validated['destination']}.
+
+{$preferenceString}
+
+Use this exact format:
+
+Day 1:
+08:00 Activity Name @ Location - Short description
+10:00 Activity Name @ Location - Short description
+...
+(3–5 activities total per day)
+
+Day 2:
+08:00 Activity Name @ Location - Short description
+...
+
+Continue this structure up to Day {$validated['days']}. Do not skip any days.
+
+Be concise, use friendly and clear language.
+EOT;
+
         $cacheKey = 'itinerary_' . md5($prompt);
         $response = Cache::remember($cacheKey, now()->addMinutes(30), function () use ($prompt) {
             return (new AIService())->generateItinerary($prompt);
         });
-    
+
         Log::info('AI Prompt:', ['prompt' => $prompt]);
         Log::info('AI Response:', ['response' => $response]);
-    
+
         if (!$response) {
             Log::error('AI Service returned no response');
             return redirect()->route('dashboard')->with('error', 'AI failed to generate an itinerary. Please try again later.');
         }
-    
+
         $itinerary = $this->parseResponse($response);
-    
+
         if (empty($itinerary['schedule'])) {
             Log::error('Failed to parse itinerary response', ['response' => $response]);
             return redirect()->route('dashboard')->with('error', 'Unable to understand the itinerary format. Please regenerate.');
         }
-    
+
         return view('generate', [
             'itinerary' => $itinerary['schedule'],
             'places' => $this->getMapLocations($itinerary['schedule']),
@@ -92,7 +92,6 @@ class ItineraryController extends Controller
             'tripTheme' => $validated['travel_type']
         ]);
     }
-    
 
     protected function parseResponse($response)
     {
