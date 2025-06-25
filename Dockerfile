@@ -28,9 +28,9 @@ RUN composer install --no-dev --optimize-autoloader
 
 
 # Expose port
-EXPOSE 8000
+EXPOSE 10000
 
 # Start Laravel
-CMD php artisan serve --host=0.0.0.0 --port=8000
+CMD php artisan serve --host=0.0.0.0 --port=10000
 
 RUN docker-php-ext-install pdo_pgsql pgsql
