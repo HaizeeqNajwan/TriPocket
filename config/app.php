@@ -170,7 +170,7 @@ return [
         /*
          * Package Service Providers...
          */
-        OpenAI\Laravel\OpenAIServiceProvider::class,
+        //OpenAI\Laravel\OpenAIServiceProvider::class,
     
 
         /*
