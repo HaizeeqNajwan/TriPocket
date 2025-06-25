@@ -45,8 +45,8 @@ Route::get('/test-email', function () {
 
 // Landing Page (Homepage)
 Route::get('/', function () {
-    return view('homepage');
-})->name('homepage');
+    return view('index');
+})->name('index');
 
 // Main Index Page
 
