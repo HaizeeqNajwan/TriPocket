@@ -15,7 +15,7 @@ class AIService
                 'HTTP-Referer' => 'https://tripocket.yourdomain.com/',
                 'X-Title' => 'TriPocket AI',
             ])->post('https://openrouter.ai/api/v1/chat/completions', [
-                'model' => 'mistralai/mixtral-8x7b-instruct',
+                'model' => 'meta-llama/llama-4-maverick-17b-128e-instruct:free',
                 'messages' => [
                     ['role' => 'system', 'content' => 'You are a helpful travel assistant.'],
                     ['role' => 'user', 'content' => $prompt],
