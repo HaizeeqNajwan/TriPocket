@@ -53,5 +53,10 @@ CMD ["php", "artisan", "serve", "--host=0.0.0.0", "--port=10000"]
 
 RUN php artisan key:generate
 
-RUN php artisan session:table && php artisan migrate
+# Skip generating if it already exists
+RUN if [ ! -f database/migrations/*_create_sessions_table.php ]; then php artisan session:table; fi
+
+# Migrate anyway
+RUN php artisan migrate --force
+
 
