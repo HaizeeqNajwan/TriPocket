@@ -234,7 +234,7 @@ return [
         'View' => Illuminate\Support\Facades\View::class,
 
         // OpenAI Facade
-        'OpenAI' => OpenAI\Laravel\Facades\OpenAI::class,
+        //'OpenAI' => OpenAI\Laravel\Facades\OpenAI::class,
     ],
 
 ];
