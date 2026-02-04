@@ -6,17 +6,22 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    public function up()
+    /**
+     * Run the migrations.
+     */
+    public function up(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->dropColumn('profile_picture');
+            $table->json('preferences')->nullable();
+            $table->boolean('preferences_selected')->default(false);
         });
     }
-
-    public function down()
+    
+    public function down(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->string('profile_picture')->nullable();
+            $table->dropColumn(['preferences', 'preferences_selected']);
         });
     }
+    
 };

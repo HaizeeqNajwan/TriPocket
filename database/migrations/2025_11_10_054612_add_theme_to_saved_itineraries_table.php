@@ -9,18 +9,18 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-    public function up()
+    public function up(): void
     {
         Schema::table('saved_itineraries', function (Blueprint $table) {
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->string('theme')->nullable();
         });
     }
     
-    public function down()
+    public function down(): void
     {
         Schema::table('saved_itineraries', function (Blueprint $table) {
-            $table->dropForeign(['user_id']);
-            $table->dropColumn('user_id');
+            $table->dropColumn('theme');
         });
     }
+    
 };

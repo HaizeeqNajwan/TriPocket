@@ -45,8 +45,9 @@ Route::get('/test-email', function () {
 
 // Landing Page (Homepage)
 Route::get('/', function () {
-    return view('index');
+    return view('homepage'); // matches homepage.blade.php
 })->name('index');
+
 
 // Main Index Page
 
