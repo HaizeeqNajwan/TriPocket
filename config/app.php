@@ -170,7 +170,6 @@ return [
         /*
          * Package Service Providers...
          */
-        //OpenAI\Laravel\OpenAIServiceProvider::class,
     
 
         /*
@@ -233,8 +232,6 @@ return [
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
 
-        // OpenAI Facade
-        //'OpenAI' => OpenAI\Laravel\Facades\OpenAI::class,
     ],
 
 ];

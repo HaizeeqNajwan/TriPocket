@@ -31,7 +31,7 @@ Route::post('/register', function (Request $request) {
     // 3. Redirect to preferences page
     return redirect()->route('login'); // Direct URL
     // OR if you prefer named routes:
-    // return redirect()->route('preferences');
+    return redirect()->route('preferences.select');
 })->name('register');
 
 // Protected routes group
@@ -55,7 +55,7 @@ Route::get('/', function () {
 // Authenticated Routes Group
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/dashboard', [ItineraryController::class, 'showDashboard'])->name('dashboard');
-    Route::get('/generate-itinerary', [ItineraryController::class, 'generate'])->name('itinerary.generate');
+    Route::post('/generate-itinerary', [ItineraryController::class, 'generate'])->name('itinerary.generate');
 
     // Preferences
     Route::prefix('preferences')->group(function () {

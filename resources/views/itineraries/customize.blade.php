@@ -11,7 +11,7 @@
 
     <!-- Main Content Card -->
     <div class="w-full max-w-6xl bg-white rounded-lg shadow-lg p-6 mb-10 overflow-auto">
-        <h1 class="text-2xl font-bold text-gray-800 mb-6 text-center">🛠️ Customize Your Itinerary</h1>
+        <h1 class="text-2xl font-bold text-gray-800 mb-6 text-center">Customize Your Itinerary</h1>
 
         <form method="POST" action="{{ route('itinerary.saveFinal') }}" id="itineraryForm">
             @csrf
