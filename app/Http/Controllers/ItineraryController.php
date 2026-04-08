@@ -148,7 +148,7 @@ EOT;
             'days.*.activities.*.details' => 'sometimes|string',
             'location' => 'required|string',
             'theme' => 'required|string',
-        ]);
+        ]); 
 
         $itinerary = SavedItinerary::create([
             'user_id' => auth()->id(),
@@ -215,7 +215,8 @@ EOT;
             'title' => 'Customized Itinerary',
             'location' => $request->input('location', $fallbackLocation),
             'theme' => $request->input('theme', 'custom'),
-            'days' => json_encode($validated['days']),
+            'days' => $validated['days'],
+
         ]);
 
         return redirect()->route('itinerary.view', $saved->id)

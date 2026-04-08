@@ -145,7 +145,7 @@
 
             <!-- Form Box -->
             <div class="bg-white/70 backdrop-blur-md rounded-lg shadow-lg p-6 w-full max-w-3xl mt-6">
-                <form action="{{ route('itinerary.generate') }}" method="" class="grid grid-cols-1 md:grid-cols-3 gap-4" id="itinerary-form">
+                <form action="{{ route('itinerary.generate') }}" method="POST" class="grid grid-cols-1 md:grid-cols-3 gap-4" id="itinerary-form">
                     @csrf 
                     <!-- Destination -->
                     <div class="flex flex-col space-y-2">

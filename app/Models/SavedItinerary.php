@@ -11,25 +11,20 @@ class SavedItinerary extends Model
 
     protected $fillable = [
         'user_id',
-        'title', 
+        'title',
         'location',
         'theme',
-        'days'  // This will store the JSON/array data
+        'days',
     ];
 
+    // Automatically cast 'days' JSON to array
     protected $casts = [
-        'days' => 'array'  // Automatically casts to/from JSON
+        'days' => 'array',
     ];
 
+    // Relationship to user
     public function user()
     {
         return $this->belongsTo(User::class);
     }
-
-    // Helper method to safely get days data
-    public function getItineraryDays()
-    {
-        return is_array($this->days) ? $this->days : [];
-    }
-    
 }

@@ -12,32 +12,43 @@ class AIService
         try {
             $response = Http::withHeaders([
                 'Authorization' => 'Bearer ' . env('OPENROUTER_API_KEY'),
-                'HTTP-Referer' => 'https://tripocket.yourdomain.com/',
+                'HTTP-Referer' => config('app.url'),
                 'X-Title' => 'TriPocket AI',
-            ])->post('https://openrouter.ai/api/v1/chat/completions', [
-                'model' => 'meta-llama/llama-4-maverick-17b-128e-instruct:free',
+                'Content-Type' => 'application/json',
+            ])
+            ->timeout(60)
+            ->post('https://openrouter.ai/api/v1/chat/completions', [
+                'model' => 'meta-llama/llama-3.2-3b-instruct:free',
                 'messages' => [
-                    ['role' => 'system', 'content' => 'You are a helpful travel assistant.'],
-                    ['role' => 'user', 'content' => $prompt],
+                    [
+                        'role' => 'system',
+                        'content' => 'You are a helpful travel assistant that generates structured travel itineraries.'
+                    ],
+                    [
+                        'role' => 'user',
+                        'content' => $prompt
+                    ],
                 ],
             ]);
 
             if ($response->successful()) {
-                $message = $response->json('choices')[0]['message']['content'] ?? null;
+                $message = $response->json('choices.0.message.content');
+
                 Log::info('AI response received', ['content' => $message]);
+
                 return $message;
-            } else {
-                Log::error('AIService error response', [
-                    'status' => $response->status(),
-                    'body' => $response->body()
-                ]);
             }
+
+            Log::error('AIService error response', [
+                'status' => $response->status(),
+                'body' => $response->body(),
+            ]);
         } catch (\Exception $e) {
             Log::error('AIService exception', [
-                'message' => $e->getMessage()
+                'message' => $e->getMessage(),
             ]);
         }
 
-        return null; // return null to trigger controller’s error handling
+        return null;
     }
 }
