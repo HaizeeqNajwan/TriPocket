@@ -14,7 +14,7 @@
             height: 100%;
             overflow: hidden;
         }
-        
+
         /* New loading animation styles */
         @keyframes planeFlight {
             0% { transform: translateX(-100%) rotate(0deg); }
@@ -23,40 +23,40 @@
             70% { transform: translateX(70%) rotate(-5deg); }
             100% { transform: translateX(200%) rotate(0deg); }
         }
-        
+
         @keyframes pulseGrow {
             0% { transform: scale(1); }
             50% { transform: scale(1.1); }
             100% { transform: scale(1); }
         }
-        
+
         @keyframes float {
             0% { transform: translateY(0px); }
             50% { transform: translateY(-15px); }
             100% { transform: translateY(0px); }
         }
-        
+
         @keyframes customSpin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
-        
+
         .plane-animation {
             animation: planeFlight 3s ease-in-out infinite;
         }
-        
+
         .pulse-animation {
             animation: pulseGrow 2s ease-in-out infinite;
         }
-        
+
         .float-animation {
             animation: float 4s ease-in-out infinite;
         }
-        
+
         .custom-spin {
             animation: customSpin 1.5s linear infinite;
         }
-        
+
         .gradient-text {
             background: linear-gradient(90deg, #EC4899, #8B5CF6);
             -webkit-background-clip: text;
@@ -91,12 +91,12 @@
                 <div class="w-20 h-20 bg-blue-500 rounded-full float-animation" style="animation-delay: 0.5s;"></div>
                 <div class="w-12 h-12 bg-purple-500 rounded-full float-animation" style="animation-delay: 1s;"></div>
             </div>
-            
+
             <!-- Animated plane -->
             <svg class="plane-animation absolute top-1/2 left-0 w-16 h-16 text-pink-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
             </svg>
-            
+
             <!-- Pulsing suitcase -->
             <div class="pulse-animation absolute bottom-8 right-1/4 transform translate-x-1/2">
                 <svg class="w-12 h-12 text-yellow-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -104,30 +104,30 @@
                 </svg>
             </div>
         </div>
-        
+
         <!-- Custom spinner with travel icons -->
         <div class="relative w-24 h-24 mb-6">
             <div class="absolute inset-0 border-4 border-t-pink-600 border-r-purple-600 border-b-blue-600 border-l-yellow-500 rounded-full custom-spin"></div>
             <div class="absolute inset-4 border-4 border-t-transparent border-r-transparent border-b-transparent border-l-gray-300 rounded-full custom-spin" style="animation-direction: reverse;"></div>
-            
+
             <svg class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-8 h-8 text-pink-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
             </svg>
         </div>
-        
+
         <!-- Animated loading text -->
         <div class="text-center">
             <h2 class="text-2xl font-bold gradient-text mb-2 animate__animated animate__pulse animate__infinite">Crafting Your Journey</h2>
             <p class="text-white/80 mb-4">Discovering the best experiences in <span id="loading-destination" class="font-semibold text-pink-300">Malaysia</span></p>
-            
+
             <!-- Progress dots -->
             <div class="flex justify-center space-x-2">
                 <div class="w-2 h-2 bg-pink-400 rounded-full animate-bounce" style="animation-delay: 0.1s;"></div>
                 <div class="w-2 h-2 bg-purple-400 rounded-full animate-bounce" style="animation-delay: 0.2s;"></div>
                 <div class="w-2 h-2 bg-blue-400 rounded-full animate-bounce" style="animation-delay: 0.3s;"></div>
             </div>
-            
+
             <!-- Fun travel tip -->
             <p class="text-white/60 text-sm mt-6 italic" id="travel-tip">Did you know? Malaysia has over 800 islands!</p>
         </div>
@@ -146,7 +146,7 @@
             <!-- Form Box -->
             <div class="bg-white/70 backdrop-blur-md rounded-lg shadow-lg p-6 w-full max-w-3xl mt-6">
                 <form action="{{ route('itinerary.generate') }}" method="" class="grid grid-cols-1 md:grid-cols-3 gap-4" id="itinerary-form">
-                    @csrf 
+                    @csrf
                     <!-- Destination -->
                     <div class="flex flex-col space-y-2">
                         <label for="destination" class="text-sm text-gray-700 font-medium">Where to?</label>
@@ -168,6 +168,7 @@
                             <option value="Kuala Lumpur">Kuala Lumpur</option>
                             <option value="Labuan">Labuan</option>
                             <option value="Putrajaya">Putrajaya</option>
+                            <option value="Bandung, Indonesia">Bandung</option>
                         </select>
                     </div>
 
@@ -216,11 +217,11 @@
         form.addEventListener('submit', function(e) {
             e.preventDefault();
             spinner.classList.remove('hidden');
-            
+
             // Update loading message with selected destination
             const destination = document.getElementById('destination').value || 'Malaysia';
             document.getElementById('loading-destination').textContent = destination;
-            
+
             // Show random travel tip
             const travelTips = [
                 "Did you know? Malaysia has over 800 islands!",
@@ -229,9 +230,9 @@
                 "The Rafflesia flower in Malaysia can grow up to 1m wide!",
                 "Malaysia has beaches, mountains, and rainforests all in one country"
             ];
-            document.getElementById('travel-tip').textContent = 
+            document.getElementById('travel-tip').textContent =
                 travelTips[Math.floor(Math.random() * travelTips.length)];
-            
+
             // Submit the form after showing animations
             setTimeout(() => {
                 form.submit();

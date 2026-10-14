@@ -1,27 +1,23 @@
 <?php
-
 namespace App\Services;
-
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
-
 class AIService
 {
     public function generateItinerary($prompt)
     {
         try {
-            $response = Http::withHeaders([
-                'Authorization' => 'Bearer ' . env('OPENROUTER_API_KEY'),
-                'HTTP-Referer' => 'https://tripocket.yourdomain.com/',
-                'X-Title' => 'TriPocket AI',
-            ])->post('https://openrouter.ai/api/v1/chat/completions', [
-                'model' => 'meta-llama/llama-4-maverick-17b-128e-instruct:free',
+            $response = Http::timeout(120)->post('http://host.docker.internal:1234/v1/chat/completions', [
+                'model' => 'qwen3.5-9b-deepseek-v4-flash',
                 'messages' => [
-                    ['role' => 'system', 'content' => 'You are a helpful travel assistant.'],
+                    ['role' => 'system', 'content' => 'You are a helpful travel assistant. Respond with the itinerary directly, no thinking tags.'],
                     ['role' => 'user', 'content' => $prompt],
                 ],
+                'temperature' => 0.7,
+                'stream' => false,
             ]);
-
+            Log::info('AI raw status', ['status' => $response->status()]);
+            Log::info('AI raw body', ['body' => $response->body()]);
             if ($response->successful()) {
                 $message = $response->json('choices')[0]['message']['content'] ?? null;
                 Log::info('AI response received', ['content' => $message]);
@@ -33,11 +29,8 @@ class AIService
                 ]);
             }
         } catch (\Exception $e) {
-            Log::error('AIService exception', [
-                'message' => $e->getMessage()
-            ]);
+            Log::error('AIService exception', ['message' => $e->getMessage()]);
         }
-
-        return null; // return null to trigger controller’s error handling
+        return null;
     }
 }

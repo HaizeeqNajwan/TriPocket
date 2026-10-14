@@ -56,7 +56,4 @@ Route::middleware('auth')->group(function () {
 
     Route::post('logout', [AuthenticatedSessionController::class, 'destroy'])
         ->name('logout');
-        // Add these inside your auth group
-Route::get('/itinerary/generate', [ItineraryController::class, 'showGenerated'])->name('itinerary.show');
-Route::post('/trips/store', [TripController::class, 'store'])->name('trips.store');
 });
